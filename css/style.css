@@ -1,0 +1,245 @@
+:root {
+  --gap: 12px;
+  --card: #fff;
+  --line: #e5e7eb;
+  --ink: #222;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    "Noto Sans JP",
+    sans-serif;
+  margin: 0;
+  color: var(--ink);
+  background: #f6f7f8;
+}
+header {
+  padding: 14px 16px;
+  background: #0f172a;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header h1 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+header .sub {
+  opacity: 0.9;
+  font-size: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.tab-btn {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: #eef2f7;
+  color: #0f172a;
+  cursor: grab;
+  font-size: 13px;
+  user-select: none;
+  font-weight: 600;
+}
+.tab-btn.active {
+  background: #fff;
+  color: #0b1220;
+  border-color: #64748b;
+}
+.tab-panel {
+  display: none;
+}
+.tab-panel.active {
+  display: block;
+}
+
+main {
+  padding: 12px;
+}
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+  margin-bottom: 12px;
+}
+.card h2 {
+  font-size: 15px;
+  margin: 0;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  background: #f1f5f9;
+  color: #0b1220;
+  border-radius: 12px 12px 0 0;
+  font-weight: 700;
+}
+.card .body {
+  padding: 12px;
+}
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1.1fr 1fr;
+}
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+label {
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+input[type="number"],
+select,
+input[type="text"] {
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  color: #0f172a;
+}
+button {
+  padding: 8px 12px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button.ghost {
+  background: #fff;
+  color: #111;
+  border-color: var(--line);
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.stack {
+  display: grid;
+  gap: 8px;
+}
+
+#preview {
+  max-width: min(520px, 90vw);
+  max-height: 520px;
+  display: block;
+}
+#resultCanvas {
+  max-width: min(520px, 90vw);
+  max-height: 520px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+#displayCanvas,
+#maskCanvas {
+  max-width: min(80vw, 900px);
+  height: auto;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th,
+td {
+  border: 1px solid var(--line);
+  padding: 6px 8px;
+  font-size: 12px;
+}
+th {
+  background: #f8fafc;
+  text-align: left;
+}
+.sw {
+  width: 1.6em;
+  text-align: center;
+  font-weight: 700;
+}
+.muted {
+  color: #475569;
+  font-size: 12px;
+}
+.pill {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  border: 1px solid var(--line);
+  font-size: 11px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+#legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 6px;
+}
+#legend .lg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px;
+  background: #fff;
+}
+#legend .sym {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+/* 右側に寄せたい時に使う簡易スペーサ */
+.row .push {
+  margin-left: auto;
+}
+
+/* 「多い順に並べる」を少しボタン寄りの見た目に */
+.chip.toggle {
+  background: #eef2f7;
+  border-color: #cbd5e1;
+  font-weight: 700;
+}
+.chip.toggle input[type="checkbox"] {
+  transform: scale(1.05);
+}

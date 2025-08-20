@@ -1,0 +1,128 @@
+export const PALETTES = {
+  wool: [
+    [221, 221, 221, "minecraft:white_wool", "白色の羊毛"],
+    [219, 125, 62, "minecraft:orange_wool", "橙色の羊毛"],
+    [179, 80, 188, "minecraft:magenta_wool", "赤紫色の羊毛"],
+    [107, 138, 201, "minecraft:light_blue_wool", "空色の羊毛"],
+    [177, 166, 39, "minecraft:yellow_wool", "黄色の羊毛"],
+    [65, 174, 56, "minecraft:lime_wool", "黄緑色の羊毛"],
+    [208, 132, 153, "minecraft:pink_wool", "桃色の羊毛"],
+    [64, 64, 64, "minecraft:gray_wool", "灰色の羊毛"],
+    [154, 161, 161, "minecraft:light_gray_wool", "薄灰色の羊毛"],
+    [46, 110, 137, "minecraft:cyan_wool", "青緑色の羊毛"],
+    [126, 61, 181, "minecraft:purple_wool", "紫色の羊毛"],
+    [46, 56, 141, "minecraft:blue_wool", "青色の羊毛"],
+    [79, 50, 31, "minecraft:brown_wool", "茶色の羊毛"],
+    [53, 70, 27, "minecraft:green_wool", "緑色の羊毛"],
+    [150, 52, 48, "minecraft:red_wool", "赤色の羊毛"],
+    [25, 22, 22, "minecraft:black_wool", "黒色の羊毛"],
+  ],
+  concrete: [
+    [207, 213, 214, "minecraft:white_concrete", "白色のコンクリート"],
+    [224, 97, 1, "minecraft:orange_concrete", "橙色のコンクリート"],
+    [169, 48, 159, "minecraft:magenta_concrete", "赤紫色のコンクリート"],
+    [35, 137, 199, "minecraft:light_blue_concrete", "空色のコンクリート"],
+    [240, 175, 21, "minecraft:yellow_concrete", "黄色のコンクリート"],
+    [94, 168, 24, "minecraft:lime_concrete", "黄緑色のコンクリート"],
+    [214, 101, 143, "minecraft:pink_concrete", "桃色のコンクリート"],
+    [55, 58, 62, "minecraft:gray_concrete", "灰色のコンクリート"],
+    [125, 125, 115, "minecraft:light_gray_concrete", "薄灰色のコンクリート"],
+    [21, 119, 136, "minecraft:cyan_concrete", "青緑色のコンクリート"],
+    [100, 31, 156, "minecraft:purple_concrete", "紫色のコンクリート"],
+    [44, 46, 143, "minecraft:blue_concrete", "青色のコンクリート"],
+    [96, 60, 32, "minecraft:brown_concrete", "茶色のコンクリート"],
+    [73, 91, 36, "minecraft:green_concrete", "緑色のコンクリート"],
+    [142, 32, 32, "minecraft:red_concrete", "赤色のコンクリート"],
+    [8, 10, 15, "minecraft:black_concrete", "黒色のコンクリート"],
+  ],
+  terracotta: [
+    [209, 178, 161, "minecraft:white_terracotta", "白色のテラコッタ"],
+    [161, 83, 37, "minecraft:orange_terracotta", "橙色のテラコッタ"],
+    [149, 88, 108, "minecraft:magenta_terracotta", "赤紫色のテラコッタ"],
+    [113, 108, 137, "minecraft:light_blue_terracotta", "空色のテラコッタ"],
+    [186, 133, 35, "minecraft:yellow_terracotta", "黄色のテラコッタ"],
+    [103, 117, 52, "minecraft:lime_terracotta", "黄緑色のテラコッタ"],
+    [160, 77, 78, "minecraft:pink_terracotta", "桃色のテラコッタ"],
+    [57, 42, 36, "minecraft:gray_terracotta", "灰色のテラコッタ"],
+    [135, 106, 97, "minecraft:light_gray_terracotta", "薄灰色のテラコッタ"],
+    [86, 91, 91, "minecraft:cyan_terracotta", "青緑色のテラコッタ"],
+    [118, 70, 86, "minecraft:purple_terracotta", "紫色のテラコッタ"],
+    [74, 59, 91, "minecraft:blue_terracotta", "青色のテラコッタ"],
+    [77, 51, 36, "minecraft:brown_terracotta", "茶色のテラコッタ"],
+    [76, 83, 42, "minecraft:green_terracotta", "緑色のテラコッタ"],
+    [143, 61, 47, "minecraft:red_terracotta", "赤色のテラコッタ"],
+    [37, 23, 16, "minecraft:black_terracotta", "黒色のテラコッタ"],
+  ],
+};
+
+export const GRID_THEMES = {
+  contrast: { thin: "#1F2937", majorOuter: "#0E7490", majorInner: "#06B6D4" },
+  darkbg: { thin: "#9CA3AF", majorOuter: "#22A3C3", majorInner: "#7EDCF3" },
+  lightbg: { thin: "#111827", majorOuter: "#0B7285", majorInner: "#0EC4E7" },
+  blue: { thin: "#0B1F4B", majorOuter: "#1D4ED8", majorInner: "#60A5FA" },
+  yellow: { thin: "#3A2D0A", majorOuter: "#B45309", majorInner: "#F59E0B" },
+};
+
+// ...（既存 PALETTES / GRID_THEMES はそのまま）...
+
+// ==== Bedrock 固定UUID / 最小エンジンバージョン ====
+export const BEDROCK_UUID_HEADER = "8f8b83e2-4f2a-4b1c-8b79-6b6b2a7e7f21";
+export const BEDROCK_UUID_MODULE = "c6a5b4f1-9e0c-4a88-9f67-2a3e5c1b2d90";
+export const BEDROCK_MIN_ENGINE_VERSION = [1, 20, 0];
+
+// ==== Java → Bedrock ID 変換 ====
+export const BEDROCK_ID_MAP = {
+  // Wool
+  "minecraft:white_wool": "white_wool",
+  "minecraft:orange_wool": "orange_wool",
+  "minecraft:magenta_wool": "magenta_wool",
+  "minecraft:light_blue_wool": "light_blue_wool",
+  "minecraft:yellow_wool": "yellow_wool",
+  "minecraft:lime_wool": "lime_wool",
+  "minecraft:pink_wool": "pink_wool",
+  "minecraft:gray_wool": "gray_wool",
+  "minecraft:light_gray_wool": "light_gray_wool",
+  "minecraft:cyan_wool": "cyan_wool",
+  "minecraft:purple_wool": "purple_wool",
+  "minecraft:blue_wool": "blue_wool",
+  "minecraft:brown_wool": "brown_wool",
+  "minecraft:green_wool": "green_wool",
+  "minecraft:red_wool": "red_wool",
+  "minecraft:black_wool": "black_wool",
+  // Concrete
+  "minecraft:white_concrete": "white_concrete",
+  "minecraft:orange_concrete": "orange_concrete",
+  "minecraft:magenta_concrete": "magenta_concrete",
+  "minecraft:light_blue_concrete": "light_blue_concrete",
+  "minecraft:yellow_concrete": "yellow_concrete",
+  "minecraft:lime_concrete": "lime_concrete",
+  "minecraft:pink_concrete": "pink_concrete",
+  "minecraft:gray_concrete": "gray_concrete",
+  "minecraft:light_gray_concrete": "light_gray_concrete",
+  "minecraft:cyan_concrete": "cyan_concrete",
+  "minecraft:purple_concrete": "purple_concrete",
+  "minecraft:blue_concrete": "blue_concrete",
+  "minecraft:brown_concrete": "brown_concrete",
+  "minecraft:green_concrete": "green_concrete",
+  "minecraft:red_concrete": "red_concrete",
+  "minecraft:black_concrete": "black_concrete",
+  // Terracotta
+  "minecraft:white_terracotta": "white_terracotta",
+  "minecraft:orange_terracotta": "orange_terracotta",
+  "minecraft:magenta_terracotta": "magenta_terracotta",
+  "minecraft:light_blue_terracotta": "light_blue_terracotta",
+  "minecraft:yellow_terracotta": "yellow_terracotta",
+  "minecraft:lime_terracotta": "lime_terracotta",
+  "minecraft:pink_terracotta": "pink_terracotta",
+  "minecraft:gray_terracotta": "gray_terracotta",
+  "minecraft:light_gray_terracotta": "light_gray_terracotta",
+  "minecraft:cyan_terracotta": "cyan_terracotta",
+  "minecraft:purple_terracotta": "purple_terracotta",
+  "minecraft:blue_terracotta": "blue_terracotta",
+  "minecraft:brown_terracotta": "brown_terracotta",
+  "minecraft:green_terracotta": "green_terracotta",
+  "minecraft:red_terracotta": "red_terracotta",
+  "minecraft:black_terracotta": "black_terracotta",
+};
+
+export const DATA_VERSION = 3953; // 必要なら環境に合わせて後で更新可

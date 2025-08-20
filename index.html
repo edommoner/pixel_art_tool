@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>マップアート支援ツール（可動タブ・背景移動Cropper・除外/重み・ガイド・レイヤー出力）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- head 内に追加/置換 -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>マップアート支援ツール</h1>
+
+      <div class="sub">
+        切り抜き → 量子化/ディザ → グリッド表示 → 集計 →
+        <span class="pill">レイヤー出力</span>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab-btn active" data-tab="tab1" draggable="true">① 画像処理</button>
+      <button class="tab-btn" data-tab="tab2" draggable="true">② 表示・ガイド・エクスポート</button>
+      <button class="tab-btn" data-tab="tab3" draggable="true">③ 集計・出力</button>
+    </nav>
+
+    <main>
+      <section id="tab1" class="tab-panel active">
+        <div class="card">
+          <h2>画像入力・切り抜き・変換</h2>
+          <div class="body stack">
+            <div class="row">
+              <input type="file" id="imageInput" accept="image/*" />
+              <label
+                >出力サイズ
+                <select id="outputSize">
+                  <option value="128" selected>128×128（地図1枚）</option>
+                  <option value="256">256×256（2×2）</option>
+                  <option value="512">512×512（4×4）</option>
+                </select>
+              </label>
+              <!-- ▼ 追加：ボタンを上段へ移動 -->
+              <button id="cropButton" disabled>切り抜いて変換</button>
+              <button id="downloadOrigBtn" disabled>原寸PNG</button>
+              <button id="downloadScaledBtn" disabled>拡大PNG（ガイド無し）</button>
+            </div>
+
+            <div class="row" id="ditherRow">
+              <label class="chip">ディザ <input type="checkbox" id="dithering" checked /></label>
+              <label class="chip">
+                <input type="checkbox" id="useOklab" />
+                テスト（OKLab+Guided）
+              </label>
+              <label id="lblMethod"
+                >手法
+                <select id="ditheringMethod">
+                  <option value="floyd" selected>Floyd?Steinberg</option>
+                  <option value="jjn">Jarvis?Judice?Ninke</option>
+                  <option value="atkinson">Atkinson</option>
+                  <option value="ordered">Ordered（ブルーノイズ）</option>
+                </select>
+              </label>
+              <label class="chip" id="lblSelective"
+                ><input type="checkbox" id="selectiveDithering" checked /> 自動判定（複合）</label
+              >
+              <label class="chip" id="lblNatural"
+                ><input type="checkbox" id="naturalDithering" checked /> ナチュラル</label
+              >
+              <label id="lblStrength"
+                >強度
+                <input type="range" id="naturalStrength" min="0" max="100" value="100" />
+              </label>
+            </div>
+
+            <div class="row">
+              <span>ブロックグループ：</span>
+              <label class="chip"><input type="checkbox" id="pWool" checked /> 羊毛</label>
+              <label class="chip"><input type="checkbox" id="pTerracotta" /> テラコッタ</label>
+              <label class="chip"><input type="checkbox" id="pConcrete" /> コンクリート</label>
+              <label class="chip"><input type="checkbox" id="pCustom" /> カスタム</label>
+              <button id="editPaletteBtn" class="ghost">カスタム編集</button>
+              <button id="prefBtn" class="ghost">除外・重み設定</button>
+            </div>
+
+            <div class="grid">
+              <div class="stack">
+                <span class="muted">ドラッグで <b>画像</b> が動きます（Cropper: 背景移動モード）</span>
+                <img id="preview" alt="プレビュー" style="display: none" />
+              </div>
+              <div class="stack">
+                <canvas id="resultCanvas" width="128" height="128" aria-label="変換結果"></canvas>
+
+                <div id="legend"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ▼ 追加：③ 表示・ガイド・エクスポート -->
+      <section id="tab2" class="tab-panel">
+        <div class="card">
+          <h2>拡大表示・ガイド・エクスポート</h2>
+          <div class="body stack">
+            <span class="muted">拡大表示（グリッド）</span>
+            <div class="row">
+              <label class="chip toggle" title="各レイヤーPNGを、使用ピクセル数が多い順に並べ替えて保存します">
+                多い順に並べる
+                <input type="checkbox" id="sortLayersByCount" />
+              </label>
+              <button id="exportPerBlockZip" disabled>ブロック別レイヤー（ZIP）</button>
+              <button id="downloadGuideBtn" disabled>ガイド画像を保存</button>
+            </div>
+            <canvas id="displayCanvas"></canvas>
+
+            <!-- ここは「拡大表示の下に並んでいた」コントロール群を丸ごと移設 -->
+            <div class="row">
+              <label class="chip"><input type="checkbox" id="showOutline" /> ガイド：境界線</label>
+              <label class="chip"><input type="checkbox" id="showSymbols" /> ガイド：数字オーバーレイ</label>
+              <label class="chip"
+                >記号サイズ
+                <input type="range" id="symbolScale" min="50" max="220" value="100" />
+              </label>
+              <label class="chip"
+                >グリッド配色
+                <select id="gridTheme">
+                  <option value="contrast" selected>高コントラスト（白ハロー＋濃グレー / シアン）</option>
+                  <option value="darkbg">暗背景向け（白＋薄グレー / 薄シアン）</option>
+                  <option value="lightbg">明背景向け（黒＋濃グレー / 濃シアン）</option>
+                  <option value="blue">青基調（白＋群青 / 青シアン）</option>
+                  <option value="yellow">黄基調（白＋こげ茶 / 黄系強調）</option>
+                </select>
+              </label>
+              <label class="chip" title="固定色のまま、線をセルごとに分割して描画">
+                ますごとに描画
+                <input type="checkbox" id="gridAutoPerCell" />
+              </label>
+              <label class="chip" title="1マスごとの細グリッドの太さ"
+                >細グリッド太さ
+                <input type="range" id="thinWidth" min="6" max="40" value="10" />
+              </label>
+              <label class="chip" title="強調グリッド（Nマスごと）の太さ"
+                >強調グリッド太さ
+                <input type="range" id="majorWidth" min="18" max="80" value="34" />
+              </label>
+              <label class="chip" title="Nマスごとに太線"
+                >強調間隔
+                <input type="range" id="majorEvery" min="4" max="64" step="1" value="16" />
+                <span id="majorEveryVal">16</span>
+              </label>
+              <label class="chip"
+                >レイヤー背景
+                <select id="layerBg">
+                  <option value="transparent" selected>透明</option>
+                  <option value="dim">薄灰で塗る</option>
+                  <option value="color">任意カラー</option>
+                  <option value="auto">自動（色に応じて見やすく）</option>
+                </select>
+              </label>
+              <input
+                type="color"
+                id="layerBgColor"
+                value="#DDDDDD"
+                title="レイヤー背景色"
+                style="width: 40px; height: 28px; border: none; padding: 0"
+              />
+            </div>
+
+            <div id="legend"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab3" class="tab-panel">
+        <div class="card">
+          <h2>集計・ディザマスク・エクスポート</h2>
+          <div class="body stack">
+            <div class="row">
+              <button id="exportCountsBtn" class="ghost" disabled>CSVで色数を保存</button>
+              <button id="toggleMaskBtn" class="ghost">マスク表示 切替</button>
+              <button id="runTestsBtn" class="ghost">開発者テストを実行</button>
+            </div>
+            <div class="row">
+              <div class="stack" style="flex: 1">
+                <span class="muted">ディザリング適用マスク</span>
+                <canvas id="maskCanvas" width="128" height="128"></canvas>
+              </div>
+              <div class="stack" style="flex: 1">
+                <table id="woolTable">
+                  <thead>
+                    <tr>
+                      <th>色</th>
+                      <th>ブロック</th>
+                      <th>使用数</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card" style="border: none; box-shadow: none">
+              <!-- 既存の操作列（displayCanvas の下の行）に追記 -->
+              <button id="exportNbtBtn" class="ghost" disabled>構造物（.nbt）を書き出す</button>
+              <button id="exportMcstructureBtn" disabled>Bedrock構造物（.mcstructure）</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- カスタムパレット編集モーダル -->
+    <dialog id="paletteDialog">
+      <form method="dialog" class="stack" style="min-width: 460px">
+        <h3 style="margin: 0 0 6px">カスタムパレット編集（最大32色）</h3>
+        <div id="paletteEditor" class="stack"></div>
+        <div class="row">
+          <button id="addColorBtn" type="button" class="ghost">色追加</button>
+          <span class="muted">R,G,B,ブロックID,表示名</span>
+        </div>
+        <div class="row" style="justify-content: end">
+          <button class="ghost">閉じる</button>
+          <button id="applyPaletteBtn" type="button">保存して適用</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- 除外/重み設定モーダル -->
+    <dialog id="prefDialog">
+      <form method="dialog" class="stack" style="min-width: 640px">
+        <h3 style="margin: 0 0 6px">ブロックの除外 / 重みづけ</h3>
+        <div class="grid2">
+          <div class="stack">
+            <strong>グループ重み（1.0=等倍 / 大きいほど優先）</strong>
+            <label>羊毛 <input type="number" id="wWool" step="0.1" min="0" value="1.0" /></label>
+            <label>テラコッタ <input type="number" id="wTerracotta" step="0.1" min="0" value="1.0" /></label>
+            <label>コンクリート <input type="number" id="wConcrete" step="0.1" min="0" value="1.0" /></label>
+            <label>カスタム <input type="number" id="wCustom" step="0.1" min="0" value="1.0" /></label>
+          </div>
+          <div class="stack">
+            <strong>個別ブロック（使用の有無 / 重み）</strong>
+            <table id="prefTable">
+              <thead>
+                <tr>
+                  <th>使用</th>
+                  <th>色</th>
+                  <th>ID</th>
+                  <th>表示</th>
+                  <th>重み</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row" style="justify-content: end">
+          <button class="ghost">閉じる</button>
+          <button id="applyPrefBtn" type="button">保存して適用</button>
+        </div>
+      </form>
+    </dialog>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+const LS = {
+  customPalette: "mapart.customPalette",
+  groupWeights: "mapart.groupWeights",
+  blockPrefs: "mapart.blockPrefs",
+  tabOrder: "mapart.tabOrder",
+};
+
+export function loadAll(state) {
+  try {
+    state.customPalette = JSON.parse(
+      localStorage.getItem(LS.customPalette) || "[]"
+    );
+  } catch {
+    state.customPalette = [];
+  }
+  try {
+    state.groupWeights = JSON.parse(
+      localStorage.getItem(LS.groupWeights) ||
+        '{"wool":1,"terracotta":1,"concrete":1,"custom":1}'
+    );
+  } catch {
+    state.groupWeights = { wool: 1, terracotta: 1, concrete: 1, custom: 1 };
+  }
+  try {
+    state.blockPrefs = JSON.parse(localStorage.getItem(LS.blockPrefs) || "{}");
+  } catch {
+    state.blockPrefs = {};
+  }
+}
+
+export function saveCustomPalette(arr) {
+  localStorage.setItem(LS.customPalette, JSON.stringify(arr || []));
+}
+export function saveGroupWeights(obj) {
+  localStorage.setItem(LS.groupWeights, JSON.stringify(obj || {}));
+}
+export function saveBlockPrefs(obj) {
+  localStorage.setItem(LS.blockPrefs, JSON.stringify(obj || {}));
+}
+
+export function saveTabOrder(arr) {
+  localStorage.setItem(LS.tabOrder, JSON.stringify(arr || []));
+}
+export function loadTabOrder() {
+  try {
+    return JSON.parse(localStorage.getItem(LS.tabOrder) || "null");
+  } catch {
+    return null;
+  }
+}
