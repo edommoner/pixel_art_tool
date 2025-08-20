@@ -46,11 +46,17 @@ async function avgRgbFromPng(bytes) {
 
 // カテゴリ振り分け規則（必要に応じて拡張）
 const CATEGORY_RULES = [
-  { re: /^([a-z_]+)_wool$/, cat: "wool" },
-  { re: /^([a-z_]+)_carpet$/, cat: "carpet" },
-  { re: /^([a-z_]+)_concrete$/, cat: "concrete" },
-  { re: /^([a-z_]+)_concrete_powder$/, cat: "concrete_powder" },
-  { re: /^([a-z_]+)_terracotta$/, cat: "terracotta" },
+  // Wool / Carpet（Java: white_wool、Bedrock: wool_colored_white）
+  { re: /(^(?:[a-z_]+)_wool$|^wool(?:_colored)?_[a-z_]+$)/, cat: "wool" },
+  { re: /(^(?:[a-z_]+)_carpet$|^carpet(?:_colored)?_[a-z_]+$)/, cat: "carpet" },
+  // Concrete
+  { re: /(^(?:[a-z_]+)_concrete$|^concrete_[a-z_]+$)/, cat: "concrete" },
+  {
+    re: /(^(?:[a-z_]+)_concrete_powder$|^concrete_powder_[a-z_]+$)/,
+    cat: "concrete_powder",
+  },
+  // Terracotta
+  { re: /(^(?:[a-z_]+)_terracotta$|^terracotta_[a-z_]+$)/, cat: "terracotta" },
   { re: /^([a-z_]+)_glazed_terracotta$/, cat: "glazed_terracotta" },
   { re: /^([a-z_]+)_stained_glass(_pane)?$/, cat: "stained_glass" },
   { re: /^([a-z_]+)_candle(_?[0-9]*)?$/, cat: "candle" },
@@ -112,10 +118,19 @@ export async function generatePaletteFromVanillaZip(
   { skipBiomeTint = true } = {}
 ) {
   const zip = await JSZip.loadAsync(file);
-  const entries = Object.keys(zip.files).filter(
-    (p) =>
-      p.startsWith("assets/minecraft/textures/block/") && p.endsWith(".png")
-  );
+  // Java と Bedrock の両対応（大文字小文字も吸収）
+  const entries = Object.keys(zip.files).filter((p) => {
+    const s = p.toLowerCase();
+    if (!s.endsWith(".png")) return false;
+    return (
+      // Java（1.13+ は block/、古い packs は blocks/）
+      /(^|\/)assets\/minecraft\/textures\/block(s)?\//.test(s) ||
+      // Bedrock（VRP/サンプル）
+      /(^|\/)resource_pack\/textures\/blocks\//.test(s) ||
+      // 一部の配布VRPは直下に textures/blocks/ を切る
+      /(^|\/)textures\/blocks\//.test(s)
+    );
+  });
   const categories = new Map(); // cat -> array
   const flat = [];
 
@@ -129,8 +144,11 @@ export async function generatePaletteFromVanillaZip(
     const name = path.split("/").pop().replace(".png", "");
     if (skipBiomeTint && BIOME_TINTED.has(name)) continue;
 
-    // ブロックID推定
-    const blockId = `minecraft:${name}`;
+    // ブロックID（Java/Bedrock 混在でも衝突しにくいよう prefix）
+    const isBedrock =
+      /(^|\/)resource_pack\/textures\/blocks\//i.test(path.toLowerCase()) ||
+      /(^|\/)textures\/blocks\//i.test(path.toLowerCase());
+    const blockId = `${isBedrock ? "bedrock" : "minecraft"}:${name}`;
 
     // カテゴリ決定
     let cat = "others";

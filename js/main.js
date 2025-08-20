@@ -3,6 +3,11 @@ import "../css/style.css";
 import "cropperjs/dist/cropper.css";
 
 import { generatePaletteFromVanillaZip } from "./palettes/generate-from-pack.js";
+import {
+  mergeDynamicCategories as registerDynCats,
+  getEnabledDynamicPalette,
+} from "./palettes/dynamic-categories-ui.js";
+
 import { initElements, els } from "./ui/elements.js";
 import { state } from "./state.js";
 import { loadAll, loadTabOrder, saveTabOrder } from "./storage.js";
@@ -33,6 +38,8 @@ import { initVanillaLinks } from "./external/vanilla-links.js";
 import { initBedrockLinks } from "./external/bedrock-links.js";
 import { initPersistence } from "./utils/persist.js";
 const p = initPersistence(document);
+// 現在ロード済みの元画像要素を保持
+let srcImageEl = null;
 
 // --- Boot ---
 initElements();
@@ -46,6 +53,11 @@ initVanillaLinks();
 initBedrockLinks();
 updateButtonsDisabled(true);
 updateDitherUI();
+
+function onImageLoaded(e) {
+  srcImageEl = e.target; // ← グローバルに保持
+  updateDitherUI(); // ここで初めて安全に呼べる
+}
 
 function setupTabs() {
   const tabsNav = document.getElementById("tabs");
@@ -103,17 +115,6 @@ function setupTabs() {
     const order = [...tabsNav.children].map((b) => b.dataset.tab);
     saveTabOrder(order);
   }
-}
-
-// 既存の PALETTES に動的グループをマージするユーティリティ
-function mergeDynamicCategories(cats) {
-  // 例：既存の PALETTES に同名キーが無ければ追加
-  window.PALETTES = window.PALETTES || {};
-  for (const [cat, list] of Object.entries(cats)) {
-    window.PALETTES[cat] = list;
-  }
-  // もしUIに「パレット表示/重み」のチェックがあるなら、ここで再描画/再計算
-  if (window.refreshPaletteUI) window.refreshPaletteUI();
 }
 
 function setupEvents() {
@@ -379,7 +380,19 @@ function setupEvents() {
         const { categories } = await generatePaletteFromVanillaZip(file, {
           skipBiomeTint: skip,
         });
-        mergeDynamicCategories(categories);
+        registerDynCats(categories); // <= UIへ登録（★追加）
+
+        // （重要）アクティブパレットを更新 → 変換を再実行
+        const dyn = getEnabledDynamicPalette();
+        // 既存のビルド関数があるならそこへ dyn を合流させる
+        if (window.buildActivePalette) {
+          window.buildActivePalette({ dynamicAppend: dyn }); // 例：あなたの関数に合流
+        }
+        // なければ、最小限：state.paletteArray を差し替えて再描画
+        if (window.state) {
+          window.state.paletteArray = dyn;
+          document.dispatchEvent(new CustomEvent("paletteChanged")); // 任意のフック
+        }
         status.textContent = `完了：${Object.values(categories).reduce((a, b) => a + b.length, 0)} ブロック追加`;
       } catch (err) {
         console.error(err);
@@ -406,6 +419,11 @@ function updateButtonsDisabled(disabled) {
 }
 
 function updateDitherUI() {
+  const img = srcImageEl || document.getElementById("srcImage"); // 後方互換の保険
+  if (!img) return; // 画像がまだ無い状態では何もしない
+
+  const w = img.naturalWidth;
+  const h = img.naturalHeight;
   const on = !!document.getElementById("dithering")?.checked;
   const nat = !!document.getElementById("naturalDithering")?.checked;
   const useOklab = !!document.getElementById("useOklab")?.checked;
@@ -461,3 +479,5 @@ function updateDitherUI() {
 ["dithering", "naturalDithering", "useOklab"].forEach((id) => {
   document.getElementById(id)?.addEventListener("change", updateDitherUI);
 });
+
+window.addEventListener("DOMContentLoaded", initBedrockLinks, { once: true });

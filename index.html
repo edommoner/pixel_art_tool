@@ -78,16 +78,49 @@
               </label>
             </div>
 
-            <div class="row">
-              <span>ブロックグループ：</span>
-              <label class="chip"><input type="checkbox" id="pWool" checked data-persist="pWool" /> 羊毛</label>
-              <label class="chip"
-                ><input type="checkbox" id="pTerracotta" data-persist="pTerracotta" /> テラコッタ</label
-              >
-              <label class="chip"><input type="checkbox" id="pConcrete" data-persist="pConcrete" /> コンクリート</label>
-              <label class="chip"><input type="checkbox" id="pCustom" data-persist="pCustom" /> カスタム</label>
-              <button id="editPaletteBtn" class="ghost">カスタム編集</button>
-              <button id="prefBtn" class="ghost">除外・重み設定</button>
+            <!-- ▼ パレットモード切り替え -->
+            <div class="card">
+              <div class="row"><strong>パレットモード</strong></div>
+              <div class="row" style="gap: 0.5rem; flex-wrap: wrap">
+                <label class="chip"
+                  ><input type="radio" name="paletteMode" id="modeStatic" value="static" /> 静的（既存）</label
+                >
+                <label class="chip"
+                  ><input type="radio" name="paletteMode" id="modeDynamic" value="dynamic" /> 動的（取り込み）</label
+                >
+              </div>
+            </div>
+
+            <div id="staticPalettePanel">
+              <div class="row">
+                <span>ブロックグループ：</span>
+                <label class="chip"><input type="checkbox" id="pWool" checked data-persist="pWool" /> 羊毛</label>
+                <label class="chip"
+                  ><input type="checkbox" id="pTerracotta" data-persist="pTerracotta" /> テラコッタ</label
+                >
+                <label class="chip"
+                  ><input type="checkbox" id="pConcrete" data-persist="pConcrete" /> コンクリート</label
+                >
+                <label class="chip"><input type="checkbox" id="pCustom" data-persist="pCustom" /> カスタム</label>
+                <button id="editPaletteBtn" class="ghost">カスタム編集</button>
+                <button id="prefBtn" class="ghost">除外・重み設定</button>
+              </div>
+            </div>
+
+            <!-- ▼ 取り込みカテゴリ ON/OFF -->
+            <div id="dynamicPalettePanel" style="display: none">
+              <div class="card">
+                <div class="row"><strong>取り込みカテゴリ（ON / OFF）</strong></div>
+
+                <div id="dynCatToggles" class="row" style="gap: 0.5rem; flex-wrap: wrap"></div>
+
+                <div class="row" style="gap: 0.5rem; flex-wrap: wrap">
+                  <button id="dynCatAllOn" type="button" class="btn">全ON</button>
+                  <button id="dynCatAllOff" type="button" class="btn">全OFF</button>
+                  <button id="dynCatInvert" type="button" class="btn">反転</button>
+                  <span id="dynCatSummary" style="font-size: 12px; opacity: 0.8"></span>
+                </div>
+              </div>
             </div>
 
             <div class="grid">
@@ -258,6 +291,7 @@
             <select id="bedrockVersion" style="min-width: 12rem"></select>
 
             <label><input type="checkbox" id="showPreviews" /> プレビュー版を含める</label>
+            <span id="bedrockStatus" style="font-size: 12px; opacity: 0.8"></span>
           </div>
 
           <div class="row" style="gap: 0.5rem; flex-wrap: wrap">
@@ -327,5 +361,16 @@
       </form>
     </dialog>
     <script type="module" src="js/main.js"></script>
+    <script type="module">
+      import { initDynamicCategoryToggles } from "./js/palettes/dynamic-categories-ui.js";
+      initDynamicCategoryToggles();
+    </script>
+    <script type="module">
+      import { initPaletteModeSwitch } from "./js/palettes/palette-mode.js";
+      import { initDynamicCategoryToggles } from "./js/palettes/dynamic-categories-ui.js";
+
+      initDynamicCategoryToggles(); // 動的パレットUI
+      initPaletteModeSwitch(); // モード切り替え＆再計算
+    </script>
   </body>
 </html>
