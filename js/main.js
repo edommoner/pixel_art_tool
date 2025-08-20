@@ -29,6 +29,9 @@ import { exportDebugMcstructure } from "./export/mcstructure.js";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
+import { initPersistence } from "./utils/persist.js";
+const p = initPersistence(document);
+
 // --- Boot ---
 initElements();
 loadAll(state); // localStorage → state
@@ -36,6 +39,7 @@ assembleActivePalette(state); // いまはNO-OP（雛形）
 
 setupTabs();
 setupEvents();
+initPersistence(document);
 updateButtonsDisabled(true);
 updateDitherUI();
 
@@ -342,6 +346,11 @@ function setupEvents() {
     ?.addEventListener("click", () => {
       exportMcstructure(state);
     });
+
+  document.getElementById("resetSettingsBtn")?.addEventListener("click", () => {
+    p.clear();
+    location.reload();
+  });
 }
 
 function updateButtonsDisabled(disabled) {

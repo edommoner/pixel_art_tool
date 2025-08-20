@@ -1,0 +1,40 @@
+# --- Node / Vite ビルド成果物 ---
+node_modules/
+dist/
+dist-ssr/
+.vite/
+coverage/
+.eslintcache
+.npm-cache/
+*.tsbuildinfo
+
+# --- ログ類 ---
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+*.log
+
+# --- 環境変数（サンプルは残す）---
+.env
+.env.*
+!.env.example
+*.local
+
+# --- OS / エディタごみ ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+*.swp
+*.swo
+
+# JetBrains
+.idea/
+
+# VS Code（必要なら除外を外してください）
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# --- そのほか ---
+*.map

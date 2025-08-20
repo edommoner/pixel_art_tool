@@ -13,6 +13,7 @@
       <h1>マップアート支援ツール</h1>
 
       <div class="sub">
+        <button id="resetSettingsBtn" type="button">設定リセット</button>
         切り抜き → 量子化/ディザ → グリッド表示 → 集計 →
         <span class="pill">レイヤー出力</span>
       </div>
@@ -33,7 +34,7 @@
               <input type="file" id="imageInput" accept="image/*" />
               <label
                 >出力サイズ
-                <select id="outputSize">
+                <select id="outputSize" data-persist="outputSize">
                   <option value="128" selected>128×128（地図1枚）</option>
                   <option value="256">256×256（2×2）</option>
                   <option value="512">512×512（4×4）</option>
@@ -46,38 +47,44 @@
             </div>
 
             <div class="row" id="ditherRow">
-              <label class="chip">ディザ <input type="checkbox" id="dithering" checked /></label>
+              <label class="chip"
+                >ディザ <input type="checkbox" id="dithering" data-persist="dithering" checked
+              /></label>
               <label class="chip">
-                <input type="checkbox" id="useOklab" />
+                <input type="checkbox" id="useOklab" data-persist="useOklab" />
                 テスト（OKLab+Guided）
               </label>
               <label id="lblMethod"
                 >手法
-                <select id="ditheringMethod">
-                  <option value="floyd" selected>Floyd?Steinberg</option>
-                  <option value="jjn">Jarvis?Judice?Ninke</option>
+                <select id="ditheringMethod" data-persist="ditheringMethod">
+                  <option value="floyd" selected>Floyd-Steinberg</option>
+                  <option value="jjn">Jarvis-Judice?Ninke</option>
                   <option value="atkinson">Atkinson</option>
                   <option value="ordered">Ordered（ブルーノイズ）</option>
                 </select>
               </label>
               <label class="chip" id="lblSelective"
-                ><input type="checkbox" id="selectiveDithering" checked /> 自動判定（複合）</label
+                ><input type="checkbox" id="selectiveDithering" data-persist="selectiveDithering" checked />
+                自動判定（複合）</label
               >
               <label class="chip" id="lblNatural"
-                ><input type="checkbox" id="naturalDithering" checked /> ナチュラル</label
+                ><input type="checkbox" id="naturalDithering" data-persist="naturalDithering" checked />
+                ナチュラル</label
               >
               <label id="lblStrength"
                 >強度
-                <input type="range" id="naturalStrength" min="0" max="100" value="100" />
+                <input type="range" id="naturalStrength" data-persist="naturalStrength" min="0" max="100" value="100" />
               </label>
             </div>
 
             <div class="row">
               <span>ブロックグループ：</span>
-              <label class="chip"><input type="checkbox" id="pWool" checked /> 羊毛</label>
-              <label class="chip"><input type="checkbox" id="pTerracotta" /> テラコッタ</label>
-              <label class="chip"><input type="checkbox" id="pConcrete" /> コンクリート</label>
-              <label class="chip"><input type="checkbox" id="pCustom" /> カスタム</label>
+              <label class="chip"><input type="checkbox" id="pWool" checked data-persist="pWool" /> 羊毛</label>
+              <label class="chip"
+                ><input type="checkbox" id="pTerracotta" data-persist="pTerracotta" /> テラコッタ</label
+              >
+              <label class="chip"><input type="checkbox" id="pConcrete" data-persist="pConcrete" /> コンクリート</label>
+              <label class="chip"><input type="checkbox" id="pCustom" data-persist="pCustom" /> カスタム</label>
               <button id="editPaletteBtn" class="ghost">カスタム編集</button>
               <button id="prefBtn" class="ghost">除外・重み設定</button>
             </div>
@@ -106,7 +113,7 @@
             <div class="row">
               <label class="chip toggle" title="各レイヤーPNGを、使用ピクセル数が多い順に並べ替えて保存します">
                 多い順に並べる
-                <input type="checkbox" id="sortLayersByCount" />
+                <input type="checkbox" id="sortLayersByCount" data-persist="sortLayersByCount" />
               </label>
               <button id="exportPerBlockZip" disabled>ブロック別レイヤー（ZIP）</button>
               <button id="downloadGuideBtn" disabled>ガイド画像を保存</button>
@@ -115,15 +122,15 @@
 
             <!-- ここは「拡大表示の下に並んでいた」コントロール群を丸ごと移設 -->
             <div class="row">
-              <label class="chip"><input type="checkbox" id="showOutline" /> ガイド：境界線</label>
-              <label class="chip"><input type="checkbox" id="showSymbols" /> ガイド：数字オーバーレイ</label>
+              <!-- <label class="chip"><input type="checkbox" id="showOutline" data-persist="showOutline"/> ガイド：境界線</label>
+              <label class="chip"><input type="checkbox" id="showSymbols" data-persist="showSymbols"/> ガイド：数字オーバーレイ</label>
               <label class="chip"
                 >記号サイズ
                 <input type="range" id="symbolScale" min="50" max="220" value="100" />
-              </label>
+              </label> -->
               <label class="chip"
                 >グリッド配色
-                <select id="gridTheme">
+                <select id="gridTheme" data-persist="gridTheme">
                   <option value="contrast" selected>高コントラスト（白ハロー＋濃グレー / シアン）</option>
                   <option value="darkbg">暗背景向け（白＋薄グレー / 薄シアン）</option>
                   <option value="lightbg">明背景向け（黒＋濃グレー / 濃シアン）</option>
@@ -131,26 +138,26 @@
                   <option value="yellow">黄基調（白＋こげ茶 / 黄系強調）</option>
                 </select>
               </label>
-              <label class="chip" title="固定色のまま、線をセルごとに分割して描画">
+              <!-- <label class="chip" title="固定色のまま、線をセルごとに分割して描画">
                 ますごとに描画
                 <input type="checkbox" id="gridAutoPerCell" />
-              </label>
+              </label> -->
               <label class="chip" title="1マスごとの細グリッドの太さ"
                 >細グリッド太さ
-                <input type="range" id="thinWidth" min="6" max="40" value="10" />
+                <input type="range" id="thinWidth" min="6" max="40" value="10" data-persist="thinWidth" />
               </label>
               <label class="chip" title="強調グリッド（Nマスごと）の太さ"
                 >強調グリッド太さ
-                <input type="range" id="majorWidth" min="18" max="80" value="34" />
+                <input type="range" id="majorWidth" min="18" max="80" value="34" data-persist="majorWidth" />
               </label>
               <label class="chip" title="Nマスごとに太線"
                 >強調間隔
-                <input type="range" id="majorEvery" min="4" max="64" step="1" value="16" />
+                <input type="range" id="majorEvery" min="4" max="64" step="1" value="16" data-persist="majorEvery" />
                 <span id="majorEveryVal">16</span>
               </label>
               <label class="chip"
                 >レイヤー背景
-                <select id="layerBg">
+                <select id="layerBg" data-persist="layerBg">
                   <option value="transparent" selected>透明</option>
                   <option value="dim">薄灰で塗る</option>
                   <option value="color">任意カラー</option>
@@ -163,6 +170,7 @@
                 value="#DDDDDD"
                 title="レイヤー背景色"
                 style="width: 40px; height: 28px; border: none; padding: 0"
+                data-persist="layerBgColor"
               />
             </div>
 
