@@ -23,6 +23,7 @@
       <button class="tab-btn active" data-tab="tab1" draggable="true">① 画像処理</button>
       <button class="tab-btn" data-tab="tab2" draggable="true">② 表示・ガイド・エクスポート</button>
       <button class="tab-btn" data-tab="tab3" draggable="true">③ 集計・出力</button>
+      <button class="tab-btn" data-tab="tab4" draggable="true">④ リソースリンク</button>
     </nav>
 
     <main>
@@ -213,6 +214,64 @@
               <button id="exportMcstructureBtn" disabled>Bedrock構造物（.mcstructure）</button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="tab4" class="tab-panel">
+        <div class="card">
+          <div class="row">
+            <strong>バニラ全ブロックを取り込み（ZIP）</strong>
+          </div>
+          <div class="row">
+            <input type="file" id="importVanillaZip" accept=".zip" />
+            <span id="importStatus" style="margin-left: 0.5rem; font-size: 12px; opacity: 0.8"></span>
+          </div>
+          <div class="row">
+            <label
+              ><input type="checkbox" id="skipBiomeTint" checked />
+              草/葉/水などバイオーム色に左右されるテクスチャを除外</label
+            >
+          </div>
+        </div>
+        <!-- バニラ資産リンク（Java版） -->
+        <div class="card">
+          <div class="row"><strong>バニラ資産リンク（Java版）</strong></div>
+          <div class="row">
+            <label for="mcVanillaVersion">バージョン：</label>
+            <select id="mcVanillaVersion" style="min-width: 10rem"></select>
+          </div>
+          <div class="row" style="gap: 0.5rem; flex-wrap: wrap">
+            <a id="linkBrowseTextures" class="btn" target="_blank" rel="noopener">ブロックテクスチャをブラウズ</a>
+            <a id="linkDownloadTextures" class="btn" target="_blank" rel="noopener">ブロックテクスチャをZIPで取得</a>
+          </div>
+          <p class="note" style="font-size: 12px; opacity: 0.8">
+            mcasset.cloud はコミュニティ運営のミラー（Mojang非公式）ですが、Minecraft Wikiでも参照されています。<br />
+            取得後はローカルで利用し、<strong>リポジトリに同梱しない</strong>ことを推奨します。
+          </p>
+        </div>
+        <!-- Bedrock 版 Vanilla リンク -->
+        <div class="card">
+          <div class="row"><strong>バニラ資産リンク（Bedrock 版）</strong></div>
+
+          <div class="row" style="gap: 0.5rem; flex-wrap: wrap">
+            <label for="bedrockVersion">バージョン：</label>
+            <select id="bedrockVersion" style="min-width: 12rem"></select>
+
+            <label><input type="checkbox" id="showPreviews" /> プレビュー版を含める</label>
+          </div>
+
+          <div class="row" style="gap: 0.5rem; flex-wrap: wrap">
+            <a id="linkBedrockVRP" class="btn" target="_blank" rel="noopener">Vanilla Resource Pack (.zip)</a>
+            <a id="linkBedrockVBP" class="btn" target="_blank" rel="noopener">Vanilla Behavior Pack (.zip)</a>
+            <a id="linkBedrockReleasePage" class="btn" target="_blank" rel="noopener">リリースページを開く</a>
+          </div>
+
+          <p class="note" style="font-size: 12px; opacity: 0.8">
+            リンク先は Mojang 公式 <code>bedrock-samples</code> のリリースです。取得後の ZIP はローカルで利用し、
+            <strong>リポジトリに同梱しない</strong>ことを推奨します。古い版は
+            <a href="https://bedrock.dev/packs" target="_blank" rel="noopener">bedrock.dev/packs</a>
+            にアーカイブがあります。
+          </p>
         </div>
       </section>
     </main>

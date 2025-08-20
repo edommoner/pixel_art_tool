@@ -2,6 +2,7 @@
 import "../css/style.css";
 import "cropperjs/dist/cropper.css";
 
+import { generatePaletteFromVanillaZip } from "./palettes/generate-from-pack.js";
 import { initElements, els } from "./ui/elements.js";
 import { state } from "./state.js";
 import { loadAll, loadTabOrder, saveTabOrder } from "./storage.js";
@@ -28,7 +29,8 @@ import { exportMcstructure } from "./export/mcstructure.js";
 import { exportDebugMcstructure } from "./export/mcstructure.js";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-
+import { initVanillaLinks } from "./external/vanilla-links.js";
+import { initBedrockLinks } from "./external/bedrock-links.js";
 import { initPersistence } from "./utils/persist.js";
 const p = initPersistence(document);
 
@@ -40,6 +42,8 @@ assembleActivePalette(state); // いまはNO-OP（雛形）
 setupTabs();
 setupEvents();
 initPersistence(document);
+initVanillaLinks();
+initBedrockLinks();
 updateButtonsDisabled(true);
 updateDitherUI();
 
@@ -99,6 +103,17 @@ function setupTabs() {
     const order = [...tabsNav.children].map((b) => b.dataset.tab);
     saveTabOrder(order);
   }
+}
+
+// 既存の PALETTES に動的グループをマージするユーティリティ
+function mergeDynamicCategories(cats) {
+  // 例：既存の PALETTES に同名キーが無ければ追加
+  window.PALETTES = window.PALETTES || {};
+  for (const [cat, list] of Object.entries(cats)) {
+    window.PALETTES[cat] = list;
+  }
+  // もしUIに「パレット表示/重み」のチェックがあるなら、ここで再描画/再計算
+  if (window.refreshPaletteUI) window.refreshPaletteUI();
 }
 
 function setupEvents() {
@@ -351,6 +366,26 @@ function setupEvents() {
     p.clear();
     location.reload();
   });
+
+  document
+    .getElementById("importVanillaZip")
+    ?.addEventListener("change", async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const status = document.getElementById("importStatus");
+      status.textContent = "解析中…";
+      try {
+        const skip = document.getElementById("skipBiomeTint")?.checked ?? true;
+        const { categories } = await generatePaletteFromVanillaZip(file, {
+          skipBiomeTint: skip,
+        });
+        mergeDynamicCategories(categories);
+        status.textContent = `完了：${Object.values(categories).reduce((a, b) => a + b.length, 0)} ブロック追加`;
+      } catch (err) {
+        console.error(err);
+        status.textContent = "失敗しました（コンソール参照）";
+      }
+    });
 }
 
 function updateButtonsDisabled(disabled) {
