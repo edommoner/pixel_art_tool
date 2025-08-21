@@ -31,21 +31,44 @@ const makeName = (base, idx) => `minecraft:${COLORS[idx]}_${base}`;
 
 // Map RGB->java-like id (e.g., minecraft:blue_wool) comes from state.activePalette
 function toBedrockName(javaLikeId) {
-  // accept already variant-in-name
-  if (/^minecraft:[a-z_]+_(wool|concrete|terracotta)$/.test(javaLikeId))
-    return javaLikeId;
-  // try to convert base+color state forms back to variant-name (not expected in your UI, but safe):
-  const m =
-    /^minecraft:(wool|concrete|stained_hardened_clay)\[(?:.+)?color=(\d+)(?:.+)?\]$/.exec(
-      javaLikeId
-    );
-  if (m) {
-    const kind = m[1] === "stained_hardened_clay" ? "terracotta" : m[1];
-    const idx = parseInt(m[2], 10) || 0;
+  // 1) すでに Bedrock/Java 共通のシンプルID（minecraft:xxx）はそのまま
+  if (/^minecraft:[a-z_]+$/.test(javaLikeId)) return javaLikeId;
+
+  // 2) 既存対応：variant-in-name（色が末尾）
+  if (/^minecraft:[a-z_]+_(wool|concrete|terracotta)$/.test(javaLikeId)) return javaLikeId;
+
+  // 3) 既存対応：state形式（wool|concrete|stained_hardened_clay[color=N]）→ variant-name に復元
+  const mState = /^minecraft:(wool|concrete|stained_hardened_clay)\[(?:.+)?color=(\d+)(?:.+)?\]$/.exec(javaLikeId);
+  if (mState) {
+    const kind = mState[1] === "stained_hardened_clay" ? "terracotta" : mState[1];
+    const idx = parseInt(mState[2], 10) || 0;
     return `minecraft:${COLORS[idx]}_${kind}`;
   }
+
+  // 4) bedrock: 由来の ID を可能な限り minecraft: に正規化
+  if (/^bedrock:[a-z_]+$/.test(javaLikeId)) {
+    const name = javaLikeId.split(":")[1];
+
+    // colored 命名: wool/carpet/concrete/concrete_powder/terracotta/stained_glass/_pane/bed/banner/candle/shulker_box
+    const mColored = /^(wool|carpet|concrete|concrete_powder|terracotta|stained_glass|stained_glass_pane|bed|banner|candle|shulker_box)_(?:colored_)?([a-z_]+)$/.exec(name);
+    if (mColored) {
+      const base = mColored[1], color = mColored[2];
+      return `minecraft:${color}_${base}`;
+    }
+
+    // glazed terracotta （bedrock側の命名は多くが既に color_glazed_terracotta）
+    const mGlazed = /^([a-z_]+)_glazed_terracotta$/.exec(name);
+    if (mGlazed) return `minecraft:${mGlazed[1]}_glazed_terracotta`;
+
+    // そのほかはプレーン名をそのまま採用（ほとんど一致）
+    return `minecraft:${name}`;
+  }
+
+  // 5) 最終フォールバック
   return "minecraft:air";
 }
+
+
 
 function buildModelFromCanvas(state) {
   const cnv = els.resultCanvas;

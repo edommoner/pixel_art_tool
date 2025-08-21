@@ -15,7 +15,7 @@ export function convertWithOklabGuidedDitherV2(img, width, state, opts = {}) {
       ? state.paletteSnapshot
       : state?.activePalette) || [];
   const allow = normalizeAllowSets(opts.allow ?? detectAllowedFromUI());
-  const filtered = filterPaletteByAllowedSets(palette, allow);
+  const filtered = filterPaletteByAllowedSets(palette, allow, state);
   palette = filtered; // 必ず適用（emptyも許容してfail-fast）
   if (!palette.length) {
     console.warn("No colors allowed by current palette selection.");
@@ -246,18 +246,35 @@ function detectAllowedFromUI() {
   const wool = on("pWool"),
     terr = on("pTerracotta"),
     conc = on("pConcrete"),
-    cust = on("pCustom");
-  if (!(wool || terr || conc || cust))
-    return { wool: true, terracotta: true, concrete: true, custom: false }; // 何も触れてない→既定
-  return { wool: wool, terracotta: terr, concrete: conc, custom: cust };
+    cust = on("pCustom"),
+    mnat = on("pMapNature"),
+    mwood = on("pMapWood"),
+    mmin = on("pMapMinerals"),
+    mbld = on("pMapBuilding"),
+    mliq = on("pMapLiquidsFire"),
+    mnet = on("pMapNether"),
+    mend = on("pMapEnd");
+  // 何も触れてない場合は既定（既存4のみON扱い）
+  if (!(wool || terr || conc || cust || mnat || mwood || mmin || mbld || mliq || mnet || mend))
+    return { wool: true, terracotta: true, concrete: true, custom: false };
+  return {
+    wool: wool, terracotta: terr, concrete: conc, custom: cust,
+    map_nature: mnat, map_wood: mwood, map_minerals: mmin,
+    map_building: mbld, map_liquids_fire: mliq, map_nether: mnet, map_end: mend
+  };
 }
-function filterPaletteByAllowedSets(palette, allow) {
+
+function filterPaletteByAllowedSets(palette, allow, state) {
   return palette.filter((p) => {
     const id = String(p[3] || "");
+    const group = state?.groupOfId?.get(id);
+    if (group && allow && allow[group] === true) return true;
+
+    // フォールバック: 既存の材質ルール（idパターン）
     const isWool = /_wool$/.test(id);
     const isTerr = /_terracotta$/.test(id) || /stained_hardened_clay/.test(id);
     const isConc = /_concrete$/.test(id);
-    const isCust = !(isWool || isTerr || isConc);
+    const isCust = !isWool && !isTerr && !isConc; // 「custom/その他」扱い
     return (
       (allow.wool && isWool) ||
       (allow.terracotta && isTerr) ||

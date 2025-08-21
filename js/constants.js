@@ -53,6 +53,66 @@ export const PALETTES = {
     [143, 61, 47, "minecraft:red_terracotta", "赤色のテラコッタ"],
     [37, 23, 16, "minecraft:black_terracotta", "黒色のテラコッタ"],
   ],
+
+  map_nature: [
+    [127, 178, 56, "minecraft:grass_block", "【自然】草ブロック"],
+    [247, 233, 163, "minecraft:sand", "【自然】砂"],
+    [164, 168, 184, "minecraft:clay", "【自然】粘土"],
+    [151, 109, 77, "minecraft:dirt", "【自然】土"],
+    [255, 255, 255, "minecraft:snow_block", "【自然】雪"],
+    [0, 124, 0, "minecraft:oak_leaves", "【自然】葉（緑）"],
+    [129, 86, 49, "minecraft:podzol", "【自然】ポドゾル"],
+  ],
+  map_wood: [
+    [143, 119, 72, "minecraft:oak_planks", "【木材】オークの板材"],
+    [151, 91, 54, "minecraft:spruce_planks", "【木材】マツの板材"],
+    [195, 179, 123, "minecraft:birch_planks", "【木材】シラカバの板材"],
+    [146, 100, 77, "minecraft:jungle_planks", "【木材】ジャングルの板材"],
+    [125, 85, 54, "minecraft:acacia_planks", "【木材】アカシアの板材"],
+    [100, 76, 51, "minecraft:dark_oak_planks", "【木材】ダークオークの板材"],
+  ],
+  map_minerals: [
+    [167, 167, 167, "minecraft:iron_block", "【鉱物】鉄ブロック"],
+    [250, 238, 77, "minecraft:gold_block", "【鉱物】金ブロック"],
+    [92, 219, 213, "minecraft:diamond_block", "【鉱物】ダイヤブロック"],
+    [74, 128, 255, "minecraft:lapis_block", "【鉱物】ラピスラズリブロック"],
+    [0, 217, 58, "minecraft:emerald_block", "【鉱物】エメラルドブロック"],
+    [216, 175, 147, "minecraft:raw_iron_block", "【鉱物】原鉄ブロック"],
+  ],
+  map_building: [
+    [112, 112, 112, "minecraft:stone", "【建材】石"],
+    [180, 180, 180, "minecraft:stone_bricks", "【建材】石レンガ"],
+    [159, 82, 36, "minecraft:bricks", "【建材】レンガ"],
+    [255, 252, 245, "minecraft:quartz_block", "【建材】クォーツ"],
+    [100, 100, 100, "minecraft:deepslate", "【建材】ディープスレート"],
+    [225, 225, 225, "minecraft:white_concrete", "【建材】白色のコンクリート"],
+    [21, 21, 26, "minecraft:black_concrete", "【建材】黒色のコンクリート"],
+    [51, 76, 178, "minecraft:blue_concrete", "【建材】青色のコンクリート"],
+    [208, 70, 72, "minecraft:red_concrete", "【建材】赤色のコンクリート"],
+  ],
+  map_liquids_fire: [
+    [64, 64, 255, "minecraft:water", "【液体】水"],
+    [160, 160, 255, "minecraft:ice", "【液体】氷"],
+    [255, 0, 0, "minecraft:lava", "【火】溶岩・炎系"],
+  ],
+  map_nether: [
+    [112, 2, 0, "minecraft:netherrack", "【ネザー】ネザーラック"],
+    [189, 48, 49, "minecraft:crimson_nylium", "【ネザー】真紅のナイリウム"],
+    [58, 142, 140, "minecraft:warped_stem", "【ネザー】歪んだ幹"],
+    [
+      20,
+      180,
+      133,
+      "minecraft:warped_wart_block",
+      "【ネザー】歪んだワートブロック",
+    ],
+    [66, 3, 11, "minecraft:nether_bricks", "【ネザー】ネザーレンガ"],
+    [13, 13, 13, "minecraft:basalt", "【ネザー】玄武岩"],
+  ],
+  map_end: [
+    [247, 233, 163, "minecraft:end_stone", "【エンド】エンドストーン"],
+    [39, 67, 138, "minecraft:end_portal", "【エンド】エンド系（青）"],
+  ],
 };
 
 export const GRID_THEMES = {
