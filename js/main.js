@@ -4,7 +4,7 @@ import "cropperjs/dist/cropper.css";
 
 import { generatePaletteFromVanillaZip } from "./palettes/generate-from-pack.js";
 import {
-  mergeDynamicCategories as registerDynCats,
+  replaceDynamicCategories as setDynCats,
   getEnabledDynamicPalette,
 } from "./palettes/dynamic-categories-ui.js";
 
@@ -37,9 +37,13 @@ import { saveAs } from "file-saver";
 import { initVanillaLinks } from "./external/vanilla-links.js";
 import { initBedrockLinks } from "./external/bedrock-links.js";
 import { initPersistence } from "./utils/persist.js";
+
 import {
   clearDynamicBlocksOnce,
   applyOctopuchiGame8Filter,
+  regroupCatsByGame8BlockCategory,
+  regroupCatsByMaterial,
+  overrideSavedDynamicBlocks,
 } from "./palettes/dynamic-source-octopuchi-game8.js";
 
 const p = initPersistence(document);
@@ -401,10 +405,10 @@ function setupEvents() {
           }
         }
 
-        // ── octopuchi×Game8 のホワイトリストでフィルタ＆再分類
-        const { cats } = applyOctopuchiGame8Filter(dynamicList);
-        // UI 管理ストアへ登録（merge）
-        registerDynCats(cats);
+        const { cats } = applyOctopuchiGame8Filter(dynamicList); // 色カテゴリで一次取得
+        const catsByBlock = regroupCatsByGame8BlockCategory(cats); // 木材/石/…
+        setDynCats(catsByBlock); // ★ 置き換え登録（混在を防止）
+        overrideSavedDynamicBlocks(catsByBlock); // ★ 保存もブロック種別で上書き
 
         // （重要）アクティブパレットを更新 → 変換を再実行
         const dyn = getEnabledDynamicPalette();
@@ -421,7 +425,15 @@ function setupEvents() {
           (a, b) => a + b.length,
           0
         );
-        status.textContent = `完了：${filteredCount} ブロック（Game8分類で登録）`;
+        const count = Object.values(regroupCatsByMaterial).reduce(
+          (a, b) => a + b.length,
+          0
+        );
+        const count2 = Object.values(catsByBlock).reduce(
+          (a, b) => a + b.length,
+          0
+        );
+        status.textContent = `完了：${count2} ブロック（ブロック種別で登録）`;
       } catch (err) {
         console.error(err);
         status.textContent = "失敗しました（コンソール参照）";

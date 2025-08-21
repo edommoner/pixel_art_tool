@@ -8,7 +8,70 @@ const CategoryStore = {
   cats: {},
   // Map<catName, boolean>
   enabled: new Map(),
+  catLabelJa: (k) => k,
 };
+
+import {
+  loadSavedDynamicBlocks,
+  game8CategoryJa,
+  materialLabelJa,
+  blockcatLabelJa,
+} from "./dynamic-source-octopuchi-game8.js";
+const COLOR_KEYS = new Set([
+  "white",
+  "yellow",
+  "orange",
+  "red",
+  "pink",
+  "purple",
+  "blue",
+  "green",
+  "brown",
+  "gray",
+  "black",
+  "transparent",
+  "other",
+]);
+const BLOCKCAT_KEYS = new Set([
+  "stone",
+  "dirt",
+  "wood",
+  "ore",
+  "sand",
+  "glass",
+  "wool",
+  "bricks",
+  "terracotta",
+  "concrete",
+  "slab",
+  "stairs",
+  "sponge",
+  "nether",
+  "end",
+  "prismarine",
+  "coral",
+  "other",
+]);
+const BLOCKCAT_ORDER = [
+  "stone",
+  "dirt",
+  "wood",
+  "ore",
+  "sand",
+  "glass",
+  "wool",
+  "bricks",
+  "terracotta",
+  "concrete",
+  "slab",
+  "stairs",
+  "sponge",
+  "nether",
+  "end",
+  "prismarine",
+  "coral",
+  "other",
+];
 
 function loadPref() {
   try {
@@ -33,6 +96,26 @@ function renderToggles() {
   const sum = q("dynCatSummary");
   if (!wrap) return;
 
+  // --- カテゴリの種類を自動判定（色 or 素材）して日本語化関数を設定 ---
+  const keys = Object.keys(CategoryStore.cats || {});
+  const isColor = keys.length > 0 && keys.every((k) => COLOR_KEYS.has(k));
+  const isBlock = keys.length > 0 && keys.every((k) => BLOCKCAT_KEYS.has(k));
+  CategoryStore.catLabelJa = isColor
+    ? game8CategoryJa
+    : isBlock
+      ? blockcatLabelJa
+      : materialLabelJa;
+  const orderedKeys = isBlock
+    ? BLOCKCAT_ORDER.filter((k) => keys.includes(k))
+    : keys;
+
+  // 以降、既存UIの生成で label 表示を CategoryStore.catLabelJa(k) に差し替える
+  // （既存のチェックボックス/行生成ロジックを流用）
+  // 例:
+  // const label = document.createElement("label");
+  // label.textContent = CategoryStore.catLabelJa(key);
+  // ※あなたの既存ロジック内の「key をそのまま表示している箇所」を置換してください
+
   const pref = loadPref();
   // 初期状態：未知カテゴリは既定で有効
   Object.keys(CategoryStore.cats).forEach((cat) => {
@@ -49,7 +132,7 @@ function renderToggles() {
     const id = `dynCat_${cat}`;
     const checked = CategoryStore.enabled.get(cat);
     const count = CategoryStore.cats[cat]?.length || 0;
-    const label = `${cat} (${count})`;
+    const label = `${CategoryStore.catLabelJa(cat)} (${count})`;
     const el = document.createElement("label");
     el.className = "chip toggle";
     el.innerHTML = `<input type="checkbox" id="${id}" ${checked ? "checked" : ""}> ${label}`;
@@ -101,6 +184,22 @@ function renderToggles() {
       sum.textContent = `有効カテゴリ: ${onCats.length} / ${cats.length}、有効ブロック数: ${blocks}`;
   }
 }
+// 追加：完全置き換え（前の色カテゴリ等を残さない）
+export function replaceDynamicCategories(cats) {
+  CategoryStore.cats = cats || {};
+  // 有効/無効は保存値を使いつつ未知キーはON
+  const pref = loadPref();
+  CategoryStore.enabled = new Map();
+  for (const k of Object.keys(CategoryStore.cats)) {
+    const v = typeof pref[k] === "boolean" ? pref[k] : true;
+    CategoryStore.enabled.set(k, v);
+  }
+  savePref();
+  // UI再描画（このファイル内の関数を直接呼ぶ）
+  try {
+    renderToggles();
+  } catch {}
+}
 
 // 現在有効なカテゴリを平坦化して返す（配列）
 export function getEnabledDynamicPalette() {
@@ -139,11 +238,7 @@ export function initDynamicCategoryToggles() {
   announceChange();
 }
 
-// js/palettes/dynamic-categories-ui.js の末尾などに追記
-import {
-  loadSavedDynamicBlocks,
-  game8CategoryJa,
-} from "./dynamic-source-octopuchi-game8.js";
+("./dynamic-source-octopuchi-game8.js");
 
 // 起動時：保存済みの動的ブロックがあれば復元
 (function restoreSavedDynamic() {
