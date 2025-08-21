@@ -102,13 +102,28 @@
                   ><input type="checkbox" id="pConcrete" data-persist="pConcrete" /> コンクリート</label
                 >
 
-                <label class="chip"><input type="checkbox" id="pMapNature" data-persist="pMapNature" /> マップ（自然）</label>
-                <label class="chip"><input type="checkbox" id="pMapWood" data-persist="pMapWood" /> マップ（木材）</label>
-                <label class="chip"><input type="checkbox" id="pMapMinerals" data-persist="pMapMinerals" /> マップ（鉱物）</label>
-                <label class="chip"><input type="checkbox" id="pMapBuilding" data-persist="pMapBuilding" /> マップ（建材）</label>
-                <label class="chip"><input type="checkbox" id="pMapLiquidsFire" data-persist="pMapLiquidsFire" /> マップ（液体・火）</label>
-                <label class="chip"><input type="checkbox" id="pMapNether" data-persist="pMapNether" /> マップ（ネザー）</label>
-                <label class="chip"><input type="checkbox" id="pMapEnd" data-persist="pMapEnd" /> マップ（エンド）</label>
+                <label class="chip"
+                  ><input type="checkbox" id="pMapNature" data-persist="pMapNature" /> マップ（自然）</label
+                >
+                <label class="chip"
+                  ><input type="checkbox" id="pMapWood" data-persist="pMapWood" /> マップ（木材）</label
+                >
+                <label class="chip"
+                  ><input type="checkbox" id="pMapMinerals" data-persist="pMapMinerals" /> マップ（鉱物）</label
+                >
+                <label class="chip"
+                  ><input type="checkbox" id="pMapBuilding" data-persist="pMapBuilding" /> マップ（建材）</label
+                >
+                <label class="chip"
+                  ><input type="checkbox" id="pMapLiquidsFire" data-persist="pMapLiquidsFire" />
+                  マップ（液体・火）</label
+                >
+                <label class="chip"
+                  ><input type="checkbox" id="pMapNether" data-persist="pMapNether" /> マップ（ネザー）</label
+                >
+                <label class="chip"
+                  ><input type="checkbox" id="pMapEnd" data-persist="pMapEnd" /> マップ（エンド）</label
+                >
 
                 <label class="chip"><input type="checkbox" id="pCustom" data-persist="pCustom" /> カスタム</label>
                 <button id="editPaletteBtn" class="ghost">カスタム編集</button>
@@ -161,16 +176,14 @@
               <button id="exportPerBlockZip" disabled>ブロック別レイヤー（ZIP）</button>
               <button id="downloadGuideBtn" disabled>ガイド画像を保存</button>
             </div>
-            <canvas id="displayCanvas"></canvas>
-
             <!-- ここは「拡大表示の下に並んでいた」コントロール群を丸ごと移設 -->
             <div class="row">
               <!-- <label class="chip"><input type="checkbox" id="showOutline" data-persist="showOutline"/> ガイド：境界線</label>
-              <label class="chip"><input type="checkbox" id="showSymbols" data-persist="showSymbols"/> ガイド：数字オーバーレイ</label>
-              <label class="chip"
-                >記号サイズ
-                <input type="range" id="symbolScale" min="50" max="220" value="100" />
-              </label> -->
+                          <label class="chip"><input type="checkbox" id="showSymbols" data-persist="showSymbols"/> ガイド：数字オーバーレイ</label>
+                          <label class="chip"
+                            >記号サイズ
+                            <input type="range" id="symbolScale" min="50" max="220" value="100" />
+                          </label> -->
               <label class="chip"
                 >グリッド配色
                 <select id="gridTheme" data-persist="gridTheme">
@@ -182,9 +195,9 @@
                 </select>
               </label>
               <!-- <label class="chip" title="固定色のまま、線をセルごとに分割して描画">
-                ますごとに描画
-                <input type="checkbox" id="gridAutoPerCell" />
-              </label> -->
+                            ますごとに描画
+                            <input type="checkbox" id="gridAutoPerCell" />
+                          </label> -->
               <label class="chip" title="1マスごとの細グリッドの太さ"
                 >細グリッド太さ
                 <input type="range" id="thinWidth" min="6" max="40" value="10" data-persist="thinWidth" />
@@ -216,6 +229,7 @@
                 data-persist="layerBgColor"
               />
             </div>
+            <canvas id="displayCanvas"></canvas>
 
             <div id="legend"></div>
           </div>
