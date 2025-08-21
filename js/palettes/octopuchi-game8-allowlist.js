@@ -1,271 +1,6 @@
-// js/palettes/octopuchi-game8-allowlist.js
-// 出典：octopuchi「ブロックカラーチャート」掲載ブロック（例示）
-// 分類キーは Game8 の色系統別カテゴリに合わせる
-//  - white,yellow,orange,red,pink,purple,blue,green,brown,gray,black,transparent,other
-// マッチは日本語名（label）か ID（ids）で行う。必要に応じて増やしてください。
+// 網羅版 allowlist（octopuchi 掲載系を広くカバー）
+// Game8 の色系統キー: white,yellow,orange,red,pink,purple,blue,green,brown,gray,black,transparent,other
 
-export const OCTOPUCHI_ALLOWLIST = [
-  // --- 薄茶→こげ茶（記事L10付近） ---
-  {
-    label: "灰色のテラコッタ",
-    category: "gray",
-    ids: ["minecraft:light_gray_terracotta", "minecraft:gray_terracotta"],
-  },
-  { label: "トウヒの木", category: "brown", ids: ["minecraft:spruce_log"] },
-  {
-    label: "ダークオークの板材",
-    category: "brown",
-    ids: ["minecraft:dark_oak_planks"],
-  },
-  {
-    label: "ダークオークの木",
-    category: "brown",
-    ids: ["minecraft:dark_oak_log"],
-  },
-  {
-    label: "樹皮を剥いだダークオークの木",
-    category: "brown",
-    ids: ["minecraft:stripped_dark_oak_log"],
-  },
-  {
-    label: "茶色のテラコッタ",
-    category: "brown",
-    ids: ["minecraft:brown_terracotta"],
-  },
-  {
-    label: "茶色のコンクリート",
-    category: "brown",
-    ids: ["minecraft:brown_concrete"],
-  },
-  {
-    label: "茶色のシュルカーボックス",
-    category: "brown",
-    ids: ["minecraft:brown_shulker_box"],
-  },
-  { label: "茶色の羊毛", category: "brown", ids: ["minecraft:brown_wool"] },
-  {
-    label: "茶色のコンクリートパウダー",
-    category: "brown",
-    ids: ["minecraft:brown_concrete_powder"],
-  },
-  { label: "固めた泥", category: "brown", ids: ["minecraft:packed_mud"] },
-  {
-    label: "茶色のキノコブロック",
-    category: "brown",
-    ids: ["minecraft:brown_mushroom_block"],
-  },
-
-  // --- 茶→砂（記事L11付近） ---
-  {
-    label: "マングローブの木",
-    category: "brown",
-    ids: ["minecraft:mangrove_log"],
-  },
-  { label: "オークの板材", category: "brown", ids: ["minecraft:oak_planks"] },
-  {
-    label: "樹皮を剥いだオークの木",
-    category: "brown",
-    ids: ["minecraft:stripped_oak_log"],
-  },
-  {
-    label: "シラカバの板材",
-    category: "brown",
-    ids: ["minecraft:birch_planks"],
-  },
-  {
-    label: "樹皮を剥いだシラカバの木",
-    category: "brown",
-    ids: ["minecraft:stripped_birch_log"],
-  },
-  { label: "矢細工台", category: "brown", ids: ["minecraft:fletching_table"] },
-  {
-    label: "滑らかな砂岩",
-    category: "brown",
-    ids: ["minecraft:smooth_sandstone"],
-  },
-
-  // --- オレンジ（記事L11-L12） ---
-  {
-    label: "橙色のテラコッタ",
-    category: "orange",
-    ids: ["minecraft:orange_terracotta"],
-  },
-  {
-    label: "アカシアの原木",
-    category: "orange",
-    ids: ["minecraft:acacia_log"],
-  },
-  {
-    label: "樹皮を剥いだアカシアの木",
-    category: "orange",
-    ids: ["minecraft:stripped_acacia_log"],
-  },
-  { label: "テラコッタ", category: "brown", ids: ["minecraft:terracotta"] },
-  {
-    label: "錆止めされた切り込み入りの銅",
-    category: "orange",
-    ids: ["minecraft:waxed_cut_copper", "minecraft:waxed_exposed_cut_copper"],
-  },
-  {
-    label: "錆止めされた銅ブロック",
-    category: "orange",
-    ids: ["minecraft:waxed_copper_block", "minecraft:waxed_exposed_copper"],
-  },
-  { label: "赤い砂岩", category: "orange", ids: ["minecraft:red_sandstone"] },
-  { label: "赤い砂", category: "orange", ids: ["minecraft:red_sand"] },
-  {
-    label: "橙色のコンクリートパウダー",
-    category: "orange",
-    ids: ["minecraft:orange_concrete_powder"],
-  },
-  { label: "橙色の羊毛", category: "orange", ids: ["minecraft:orange_wool"] },
-
-  // --- 黄色（記事L12） ---
-  {
-    label: "黄色のテラコッタ",
-    category: "yellow",
-    ids: ["minecraft:yellow_terracotta"],
-  },
-  {
-    label: "ハニカムブロック",
-    category: "yellow",
-    ids: ["minecraft:honeycomb_block"],
-  },
-  {
-    label: "金の原石ブロック",
-    category: "yellow",
-    ids: ["minecraft:raw_gold_block"],
-  },
-  {
-    label: "黄色のコンクリート",
-    category: "yellow",
-    ids: ["minecraft:yellow_concrete"],
-  },
-  {
-    label: "黄色のシュルカーボックス",
-    category: "yellow",
-    ids: ["minecraft:yellow_shulker_box"],
-  },
-  { label: "黄色の羊毛", category: "yellow", ids: ["minecraft:yellow_wool"] },
-  { label: "金ブロック", category: "yellow", ids: ["minecraft:gold_block"] },
-  {
-    label: "黄色のコンクリートパウダー",
-    category: "yellow",
-    ids: ["minecraft:yellow_concrete_powder"],
-  },
-  {
-    label: "黄色の彩釉テラコッタ",
-    category: "yellow",
-    ids: ["minecraft:yellow_glazed_terracotta"],
-  },
-
-  // --- 黄→乳白（装飾）（記事L12） ---
-  {
-    label: "濡れたスポンジ",
-    category: "yellow",
-    ids: ["minecraft:wet_sponge"],
-  },
-  { label: "スポンジ", category: "yellow", ids: ["minecraft:sponge"] },
-  { label: "エンドストーン", category: "yellow", ids: ["minecraft:end_stone"] },
-  {
-    label: "エンドストーンレンガ",
-    category: "yellow",
-    ids: ["minecraft:end_stone_bricks"],
-  },
-  { label: "骨", category: "white", ids: ["minecraft:bone_block"] },
-  { label: "キノコの柄", category: "white", ids: ["minecraft:mushroom_stem"] },
-
-  // --- 緑→黄緑（記事L12） ---
-  {
-    label: "緑の彩釉テラコッタ",
-    category: "green",
-    ids: ["minecraft:green_glazed_terracotta"],
-  },
-  { label: "スイカ", category: "green", ids: ["minecraft:melon"] },
-  {
-    label: "黄緑色のコンクリート",
-    category: "green",
-    ids: ["minecraft:lime_concrete"],
-  },
-  {
-    label: "黄緑色のシュルカーボックス",
-    category: "green",
-    ids: ["minecraft:lime_shulker_box"],
-  },
-  { label: "黄緑色の羊毛", category: "green", ids: ["minecraft:lime_wool"] },
-  {
-    label: "エメラルドブロック",
-    category: "green",
-    ids: ["minecraft:emerald_block"],
-  },
-  {
-    label: "黄緑色の彩釉テラコッタ",
-    category: "green",
-    ids: ["minecraft:lime_glazed_terracotta"],
-  },
-  {
-    label: "黄緑色のコンクリートパウダー",
-    category: "green",
-    ids: ["minecraft:lime_concrete_powder"],
-  },
-  {
-    label: "スライムブロック",
-    category: "green",
-    ids: ["minecraft:slime_block"],
-  },
-
-  // --- 深緑→緑（記事L13） ---
-  {
-    label: "緑色のテラコッタ",
-    category: "green",
-    ids: ["minecraft:green_terracotta"],
-  },
-  {
-    label: "緑色のコンクリート",
-    category: "green",
-    ids: ["minecraft:green_concrete"],
-  },
-  { label: "苔ブロック", category: "green", ids: ["minecraft:moss_block"] },
-  { label: "緑色の羊毛", category: "green", ids: ["minecraft:green_wool"] },
-  {
-    label: "緑色のコンクリートパウダー",
-    category: "green",
-    ids: ["minecraft:green_concrete_powder"],
-  },
-  {
-    label: "黄緑糸のテラコッタ",
-    category: "green",
-    ids: ["minecraft:lime_terracotta"],
-  }, // 記事表記ゆれ対策
-
-  // --- 葉（記事L14） -> 緑カテゴリへ ---
-  { label: "トウヒの葉", category: "green", ids: ["minecraft:spruce_leaves"] },
-  { label: "シラカバの葉", category: "green", ids: ["minecraft:birch_leaves"] },
-  {
-    label: "マングローブの葉",
-    category: "green",
-    ids: ["minecraft:mangrove_leaves"],
-  },
-  {
-    label: "ダークオークの葉",
-    category: "green",
-    ids: ["minecraft:dark_oak_leaves"],
-  },
-  {
-    label: "アカシアの葉",
-    category: "green",
-    ids: ["minecraft:acacia_leaves"],
-  },
-  { label: "オークの葉", category: "green", ids: ["minecraft:oak_leaves"] },
-  {
-    label: "ジャングルの葉",
-    category: "green",
-    ids: ["minecraft:jungle_leaves"],
-  },
-  { label: "ツツジの葉", category: "green", ids: ["minecraft:azalea_leaves"] },
-];
-
-// Game8 のカテゴリ表示名（UI用）
 export const GAME8_COLOR_LABELS_JA = {
   white: "白",
   yellow: "黄",
@@ -281,3 +16,212 @@ export const GAME8_COLOR_LABELS_JA = {
   transparent: "透明",
   other: "その他",
 };
+
+function push(list, label, category, ids) {
+  list.push({ label, category, ids });
+}
+
+// 16色 → Game8カテゴリへの対応
+const COLOR_TO_CAT = {
+  white: "white",
+  light_gray: "gray",
+  gray: "gray",
+  black: "black",
+  brown: "brown",
+  red: "red",
+  orange: "orange",
+  yellow: "yellow",
+  lime: "green",
+  green: "green",
+  cyan: "blue",
+  light_blue: "blue",
+  blue: "blue",
+  purple: "purple",
+  magenta: "pink",
+  pink: "pink",
+};
+const COLOR_LABEL_JA = {
+  white: "白色",
+  light_gray: "薄灰色",
+  gray: "灰色",
+  black: "黒色",
+  brown: "茶色",
+  red: "赤色",
+  orange: "橙色",
+  yellow: "黄色",
+  lime: "黄緑色",
+  green: "緑色",
+  cyan: "青緑色",
+  light_blue: "空色",
+  blue: "青色",
+  purple: "紫色",
+  magenta: "赤紫色",
+  pink: "桃色",
+};
+const COLORS_16 = [
+  "white",
+  "light_gray",
+  "gray",
+  "black",
+  "brown",
+  "red",
+  "orange",
+  "yellow",
+  "lime",
+  "green",
+  "cyan",
+  "light_blue",
+  "blue",
+  "purple",
+  "magenta",
+  "pink",
+];
+
+// 色付き素材の一括生成
+function genDyedSet(list) {
+  const types = [
+    { key: "wool", ja: "羊毛", id: (c) => `minecraft:${c}_wool` },
+    {
+      key: "concrete",
+      ja: "コンクリート",
+      id: (c) => `minecraft:${c}_concrete`,
+    },
+    {
+      key: "concrete_powder",
+      ja: "コンクリートパウダー",
+      id: (c) => `minecraft:${c}_concrete_powder`,
+    },
+    // terracotta は light_gray など一部特殊名あり
+    {
+      key: "terracotta",
+      ja: "テラコッタ",
+      id: (c) => `minecraft:${c}_terracotta`,
+    },
+    {
+      key: "glazed_terracotta",
+      ja: "彩釉テラコッタ",
+      id: (c) => `minecraft:${c}_glazed_terracotta`,
+    },
+    {
+      key: "shulker_box",
+      ja: "シュルカーボックス",
+      id: (c) => `minecraft:${c}_shulker_box`,
+    },
+    {
+      key: "stained_glass",
+      ja: "色付きガラス",
+      id: (c) => `minecraft:${c}_stained_glass`,
+    },
+    { key: "carpet", ja: "カーペット", id: (c) => `minecraft:${c}_carpet` },
+  ];
+  for (const c of COLORS_16) {
+    const cat = COLOR_TO_CAT[c] || "other";
+    for (const t of types) {
+      const id = t.id(c);
+      const label = `${COLOR_LABEL_JA[c]}の${t.ja}`;
+      push(list, label, cat, [id]);
+    }
+  }
+  // 無着色テラコッタ（茶）
+  push(list, "テラコッタ", "brown", ["minecraft:terracotta"]);
+}
+
+// 木材・原木・樹皮を剥いだ原木/wood
+function genWoodSet(list) {
+  const woods = [
+    ["oak", "オーク"],
+    ["spruce", "トウヒ"],
+    ["birch", "シラカバ"],
+    ["jungle", "ジャングル"],
+    ["acacia", "アカシア"],
+    ["dark_oak", "ダークオーク"],
+    ["mangrove", "マングローブ"],
+  ];
+  for (const [en, ja] of woods) {
+    push(list, `${ja}の板材`, "brown", [`minecraft:${en}_planks`]);
+    push(list, `${ja}の原木`, "brown", [`minecraft:${en}_log`]);
+    push(list, `樹皮を剥いだ${ja}の木`, "brown", [
+      `minecraft:stripped_${en}_log`,
+      `minecraft:stripped_${en}_wood`,
+    ]);
+    push(list, `${ja}の木`, "brown", [`minecraft:${en}_wood`]);
+  }
+}
+
+// 葉
+function genLeaves(list) {
+  const leaves = [
+    "oak",
+    "spruce",
+    "birch",
+    "jungle",
+    "acacia",
+    "dark_oak",
+    "mangrove",
+    "azalea",
+  ];
+  const jaMap = {
+    oak: "オーク",
+    spruce: "トウヒ",
+    birch: "シラカバ",
+    jungle: "ジャングル",
+    acacia: "アカシア",
+    dark_oak: "ダークオーク",
+    mangrove: "マングローブ",
+    azalea: "ツツジ",
+  };
+  for (const en of leaves) {
+    push(list, `${jaMap[en]}の葉`, "green", [`minecraft:${en}_leaves`]);
+  }
+}
+
+// ニュートラル/黄系・白系など（装飾＆自然）
+function genNeutrals(list) {
+  push(list, "骨", "white", ["minecraft:bone_block"]);
+  push(list, "キノコの柄", "white", ["minecraft:mushroom_stem"]);
+  push(list, "エンドストーン", "yellow", ["minecraft:end_stone"]);
+  push(list, "エンドストーンレンガ", "yellow", ["minecraft:end_stone_bricks"]);
+  push(list, "スポンジ", "yellow", ["minecraft:sponge"]);
+  push(list, "濡れたスポンジ", "yellow", ["minecraft:wet_sponge"]);
+  push(list, "ハニカムブロック", "yellow", ["minecraft:honeycomb_block"]);
+  push(list, "金ブロック", "yellow", ["minecraft:gold_block"]);
+  push(list, "金の原石ブロック", "yellow", ["minecraft:raw_gold_block"]);
+  push(list, "エメラルドブロック", "green", ["minecraft:emerald_block"]);
+  push(list, "ラピスラズリブロック", "blue", ["minecraft:lapis_block"]);
+  push(list, "固めた泥", "brown", ["minecraft:packed_mud"]);
+  push(list, "滑らかな砂岩", "brown", ["minecraft:smooth_sandstone"]);
+  push(list, "赤い砂岩", "orange", ["minecraft:red_sandstone"]);
+  push(list, "赤い砂", "orange", ["minecraft:red_sand"]);
+  push(list, "苔ブロック", "green", ["minecraft:moss_block"]);
+  push(list, "スイカ", "green", ["minecraft:melon"]);
+  // きのこ
+  push(list, "茶色のキノコブロック", "brown", [
+    "minecraft:brown_mushroom_block",
+  ]);
+  push(list, "赤色のキノコブロック", "red", ["minecraft:red_mushroom_block"]);
+}
+
+// 銅系（明るい橙～赤茶系に寄ることが多い）
+function genCopper(list) {
+  const ids = [
+    "copper_block",
+    "exposed_copper",
+    "cut_copper",
+    "exposed_cut_copper",
+    "waxed_copper_block",
+    "waxed_exposed_copper",
+    "waxed_cut_copper",
+    "waxed_exposed_cut_copper",
+  ];
+  for (const id of ids) push(list, "銅系", "orange", [`minecraft:${id}`]);
+}
+
+export const OCTOPUCHI_ALLOWLIST = (() => {
+  const out = [];
+  genDyedSet(out);
+  genWoodSet(out);
+  genLeaves(out);
+  genNeutrals(out);
+  genCopper(out);
+  return out;
+})();
