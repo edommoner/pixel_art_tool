@@ -37,6 +37,11 @@ import { saveAs } from "file-saver";
 import { initVanillaLinks } from "./external/vanilla-links.js";
 import { initBedrockLinks } from "./external/bedrock-links.js";
 import { initPersistence } from "./utils/persist.js";
+import {
+  clearDynamicBlocksOnce,
+  applyOctopuchiGame8Filter,
+} from "./palettes/dynamic-source-octopuchi-game8.js";
+
 const p = initPersistence(document);
 // 現在ロード済みの元画像要素を保持
 let srcImageEl = null;
@@ -376,11 +381,30 @@ function setupEvents() {
       const status = document.getElementById("importStatus");
       status.textContent = "解析中…";
       try {
+        clearDynamicBlocksOnce();
         const skip = document.getElementById("skipBiomeTint")?.checked ?? true;
         const { categories } = await generatePaletteFromVanillaZip(file, {
           skipBiomeTint: skip,
         });
-        registerDynCats(categories); // <= UIへ登録（★追加）
+        // ── 取り込んだ categories をフラット化して動的リストへ
+        // 期待形: categories = { anyKey: [ [r,g,b,"id","label"], ... ], ... }
+        const dynamicList = [];
+        for (const arr of Object.values(categories)) {
+          for (const it of arr) {
+            // 安全側に5要素想定
+            const [r, g, b, id, label] = it;
+            dynamicList.push({
+              rgb: [r, g, b],
+              id,
+              label,
+            });
+          }
+        }
+
+        // ── octopuchi×Game8 のホワイトリストでフィルタ＆再分類
+        const { cats } = applyOctopuchiGame8Filter(dynamicList);
+        // UI 管理ストアへ登録（merge）
+        registerDynCats(cats);
 
         // （重要）アクティブパレットを更新 → 変換を再実行
         const dyn = getEnabledDynamicPalette();
@@ -393,7 +417,11 @@ function setupEvents() {
           window.state.paletteArray = dyn;
           document.dispatchEvent(new CustomEvent("paletteChanged")); // 任意のフック
         }
-        status.textContent = `完了：${Object.values(categories).reduce((a, b) => a + b.length, 0)} ブロック追加`;
+        const filteredCount = Object.values(cats).reduce(
+          (a, b) => a + b.length,
+          0
+        );
+        status.textContent = `完了：${filteredCount} ブロック（Game8分類で登録）`;
       } catch (err) {
         console.error(err);
         status.textContent = "失敗しました（コンソール参照）";

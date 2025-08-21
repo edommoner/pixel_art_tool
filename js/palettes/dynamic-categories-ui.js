@@ -138,3 +138,26 @@ export function initDynamicCategoryToggles() {
   renderToggles();
   announceChange();
 }
+
+// js/palettes/dynamic-categories-ui.js の末尾などに追記
+import {
+  loadSavedDynamicBlocks,
+  game8CategoryJa,
+} from "./dynamic-source-octopuchi-game8.js";
+
+// 起動時：保存済みの動的ブロックがあれば復元
+(function restoreSavedDynamic() {
+  const saved = loadSavedDynamicBlocks?.();
+  if (!saved || !saved.cats) return;
+
+  // 既存の CategoryStore に流し込む
+  CategoryStore.cats = saved.cats;
+  // 未知カテゴリはON初期化（既存UIの仕様に合わせてください）
+  for (const k of Object.keys(CategoryStore.cats)) {
+    if (!CategoryStore.enabled.has(k)) CategoryStore.enabled.set(k, true);
+  }
+
+  // トグルUIがカテゴリ表示名を使う場合のフォールバック
+  // （ラベル表示用に必要なら適宜利用）
+  CategoryStore.catLabelJa = (key) => game8CategoryJa(key);
+})();
